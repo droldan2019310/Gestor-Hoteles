@@ -2,13 +2,14 @@
 
 var express = require('express');
 var bodyParser = require('body-parser');
+var adminRoutes = require('./routes/admin.route');
 
-var app = express();
+var api = express();
 
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
+api.use(bodyParser.urlencoded({extended: false}));
+api.use(bodyParser.json());
 
-app.use((req, res, next) => {
+api.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
 	res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
@@ -16,5 +17,6 @@ app.use((req, res, next) => {
 	next();
 });
 
+api.use('/gestor', adminRoutes);
 
-module.exports = app;
+module.exports = api;
