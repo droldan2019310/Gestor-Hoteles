@@ -1,0 +1,15 @@
+----- ACTIVIDADES -----
+
+Equipo Front:
+	coordinador - Davis Roldan	 
+		Davis Roldan: Home ; AgregarHotel, AgregarHabitacio, HotelPublicoGeneral ; AgregarServicio ; Graficas
+		Eder Muralles: Footer ; carrousel ; RegistrarUsuario , EditarUsuario ; AgregarServicioReservacion ; EditarHotel; 
+		Justyn Sandoval: navbar ; login ; EliminarHotel ; listarServicios ; listarUsuarios ; listarHoteles 
+	FECHA DE ENTREGA: 23-24 DE MAYO
+
+Equipo Back:
+	Coordinador - Diego Gonnzalez
+		Diego Gonzalez: app ; index ; routes ; Model(Invoice, Reservation, User) ; Controller Admin
+		Jeremias Lopez: Model(Room, Addres) ; Controller User	
+		Jose Jax : Model(Hotel,Feature)) ; Controller AdminHotel
+	FECHA DE ENTREGA: 17-18 DE MAYO
