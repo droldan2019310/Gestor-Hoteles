@@ -26,9 +26,9 @@ function saveUser(req, res){
                         user.username = params.username;
                         user.email = params.email;
                         user.phone = params.phone;
-                        user.role = params.role; //Opciones: 'ROLE_USER', 'ROLE_ADMIN','ROLE_ADMINHOTEL'                        
+                        user.role = params.role; //Opciones: 'ROLE_USER'                      
 
-                        if(params.role ='ROLE_ADMIN' ||'ROLE_ADMINHOTEL'){
+                        if((params.role != 'ROLE_USER')){
                             return res.status(401).send({message: 'No tiene permiso para  crear este tipo de usuario.'});
                         }else{
                             user.save((err, userSaved)=>{

@@ -3,6 +3,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var adminRoutes = require('./routes/admin.route');
+var userRoutes = require('./routes/user.route');
 
 var api = express();
 
@@ -17,6 +18,7 @@ api.use((req, res, next) => {
 	next();
 });
 
+api.use('/gestor', userRoutes);
 api.use('/gestor', adminRoutes);
 
 module.exports = api;
