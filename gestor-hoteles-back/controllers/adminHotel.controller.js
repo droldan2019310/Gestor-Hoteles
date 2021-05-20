@@ -1,12 +1,10 @@
 'use strict'
 
-var hotel = require('../models/hotel.model');
 var user = require('../models/User');
 var bcrypt = require('..bcrypt-nodejs');
 var jwt = require('../services/jwt');
 
-var fs = require('fs');
-var path = require ('path');
+
 
 function saveUserByAdmin(req, res) {
     var userId = req.params.id;
@@ -55,33 +53,8 @@ function saveUserByAdmin(req, res) {
     }
 }
 
-function getUsers(req, res){
 
-    User.find({}).populate('').exec((err, users)=>{
-            if(err){
-                    return res.status(500).send({message: 'Error general en el servidor'})
-            }else if(users){
-                    return res.send({message: 'Usuarios: ', users})
-            }else{
-                    return res.status(404).send({message: 'No hay registros'})
-            }
-        })
-}
 
-let userId = req.params.id;
-
-if(userId != req.user.sub){
-    return res.status(403).send({message: 'No tienes permiso para realizar esta acción'});
-}
-
-function getUsers(req, res){
-    User.find({}).exec((err, users)=>{ //Busqueda general (filtraciones)
-        if(err){
-            res.status(500).send({message: 'Error en el servidor al intentar buscar'})
-        }else if(users){
-            res.status(200).send({message: 'usuarios encontrados', users})
-        }else{
-            res.status(200).send({message: 'No hay registros'})
-        }
-    })
+module.exports = {
+    saveUserAdmin
 }

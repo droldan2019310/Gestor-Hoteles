@@ -12,8 +12,8 @@ var roomSchema = Schema ({
     amountRoom: String,
     takeRoom: String,
     availableRoom: String,
-    status:[{
-        disponible: String,
-        ocupado: String
-    }]
+    status: String
 })
+
+
+module.exports = mongoose.model('room', roomSchema);

@@ -55,57 +55,6 @@ function pruebaController(req, res){
     res.status(200).send({message: 'Respuesta desde el controlador'});
 }
 
-function login(req, res){
-    var params = req.body;
-
-    if(params.username && params.password){
-        User.findOne({username: params.username}, (err, userFind)=>{
-            if(err){
-                res.status(500).send({message: 'Error general', err});
-            }else if(userFind){
-                bcrypt.compare(params.password, userFind.password, (err, checkPassword)=>{
-                    if(err){
-                        res.status(500).send({message: 'Error general', err});
-                    }else if(checkPassword){
-                        res.status(200).send({message: 'Usuario logeado exitosamente'});
-                    }else{
-                        res.status(200).send({message: 'Nombre de usuario o contraseña incorrecta'});
-                    }
-                })
-            }else{
-                res.status(200).send({message: 'No se encontró la cuenta'});  
-            }
-        })
-    }else{
-        res.status(404).send({message: 'Por favor envía los campos obligatorios'})
-    }
-}
-
-function getUsers(req, res){
-    User.find({}).exec((err, users)=>{
-        if(err){
-            res.status(500).send({message: 'Error en el servidor', err});
-        }else if(users){
-            res.status(200).send({message: 'Usuarios encontrados: ', users});
-        }else{
-            res.status(200).send({message: 'No hay registros'});
-        }
-    })
-}
-
-function getUser(req, res) {
-    let userId = req.params.id;
-    
-    User.findById(userId).exec((err, user)=>{ 
-        if(err){
-            res.status(500).send({message: 'Error en el servidor'});
-        }else if(user){
-            res.status(200).send({message: 'Usuario encontrado', user})
-        }else{
-            res.status(200).send({message: 'No hay registros'})
-        }
-    })
-}
 
 function updateUser(req, res){
     let userId = req.params.id;
@@ -117,7 +66,7 @@ function updateUser(req, res){
                 res.status(500).send({message: 'Error en el servidor'})
             }else if(usernameFind){
                 res.status(200).send({message: 'Nombre de usario ya en uso, no se puede actualizar'})
-            }else{
+            }else{                
                 User.findByIdAndUpdate(userId, update, {new: true},(err, userUpdated)=>{
                     if(err){
                         res.status(500).send({message: 'Error en el servidor al intentar actualizar'});
@@ -144,14 +93,18 @@ function updateUser(req, res){
 
 function removeUser(req, res){
     let userId = req.params.id;
+    var params = req.body;
+
     User.findByIdAndRemove(userId, (err, userRemoved)=>{
-        if(err){
-            res.status(500).send({message: 'Error en el servidor'});
-        }else if(userRemoved){
-            res.status(200).send({message: 'Usuario eliminado', userRemoved});
-        }else{
-            res.status(200).send({message: 'No existe el usuario o ya fue eliminado'});
-        }
+        bcrypt.compare(params.password, userRemoved.password, (err, checkPassword)=>{
+            if(err){
+                res.status(500).send({message: 'Error en el servidor'});
+            }else if(userRemoved){
+                res.status(200).send({message: 'Usuario eliminado', userRemoved});
+            }else{
+                res.status(200).send({message: 'No existe el usuario o ya fue eliminado'});
+            }
+        })
     })
 }
 
@@ -159,9 +112,6 @@ function removeUser(req, res){
 module.exports = {
     saveUser,
     pruebaController,
-    login,
-    getUsers,
-    getUser,
     updateUser,
     removeUser
 }

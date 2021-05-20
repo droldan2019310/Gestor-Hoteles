@@ -177,7 +177,7 @@ function removeUser(req, res){
 }
 
 function getUsers(req, res){
-    User.find({}).populate('contacts').exec((err, users)=>{
+    User.find({}).exec((err, users)=>{
         if(err){
             return res.status(500).send({message: 'Error general'})
         }else if(users){

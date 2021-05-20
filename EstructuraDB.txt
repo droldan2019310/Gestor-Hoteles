@@ -1,6 +1,6 @@
 ---------- Gestor de hoteles ---------
 
-Model User
+Model User --YAAA (falta settear hotel)
 	name
 	lastname
 	phone 
@@ -8,6 +8,7 @@ Model User
 	email
 	password
 	Role [Admin, Admin_Hotel, UserCustomer]
+	hotel[object_Id]
 
 Model Hotel
 	name
@@ -19,11 +20,11 @@ Model Hotel
 	img
 	Room[object_Id]
 
-Model Addres 
+Model Addres --- YAAA
 	department [Guatemala, San marcos, Peten, etc...]
 	desc 
 
-Model Room
+Model Room --YAAA 
 	nameRoom  
 	priceRoom 
 	descRoom  

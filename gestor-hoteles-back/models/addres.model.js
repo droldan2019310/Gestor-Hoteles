@@ -8,6 +8,6 @@ var addresSchema = Schema({
     descDepartament: String
 })
 
-module.exports = mongoose.model('addres', addresSchema)
+module.exports = mongoose.model('addre', addresSchema)
 
 

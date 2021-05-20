@@ -10,7 +10,8 @@ var featureSchema = Schema({
     img: String,
     slogan: String,
     type: String,
-    price: Number
+    price: Number,
+    features: [{type: Schema.ObjectId, ref: 'feature'}],
 })
 
 module.exports = mongoose.model('feature', featureSchema);
