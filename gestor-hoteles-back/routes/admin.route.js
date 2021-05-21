@@ -14,6 +14,9 @@ api.put('/removeUser/:id', mdAuth.ensureAuth, adminController.removeUser); //eli
 api.get('/getUsers', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], adminController.getUsers); //obtener todos los user. Opcion habil solo para admin.
 api.post('/search', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], adminController.search) //Buscar user. Opcion habil solo para admin.\
 api.get('/getUsersAdminHotel', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], adminController.getUsersAdminHotel); //obtener todos los user. Opcion habil solo para admin.
+api.get('/countUserAdmin', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], adminController.countUserAdmin); //obtener todos los user. Opcion habil solo para admin.
+api.get('/countUser', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], adminController.countUser); //obtener todos los user. Opcion habil solo para admin.
+api.get('/countUserAdminHotel', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], adminController.countUserAdminHotel); //obtener todos los user. Opcion habil solo para admin.
 
 
 module.exports = api;
