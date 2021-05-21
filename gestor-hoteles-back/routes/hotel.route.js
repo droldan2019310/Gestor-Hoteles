@@ -13,6 +13,7 @@ api.post('/saveHotel',[mdAuth.ensureAuth, mdAuth.ensureAuthAdmin],hotelControlle
 api.put('/:id/uploadImageHotel', [mdAuth.ensureAuth, mdUpload], hotelController.uploadImageHotel);
 api.put('/:id/setUserHotel',[mdAuth.ensureAuth, mdAuth.ensureAuthAdmin],mdAuth.ensureAuth, hotelController.setUserHotel);
 api.put('/:id/setFeatureHotel', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin],mdAuth.ensureAuth, hotelController.setFeatureHotel);
+api.put('/getImage/:fileName', [ mdUpload], hotelController.getImage);
 
 
 

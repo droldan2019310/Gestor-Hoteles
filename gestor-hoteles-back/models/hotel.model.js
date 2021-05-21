@@ -9,7 +9,11 @@ var hotelSchema = Schema({
     email: String,
     addres: String,
     descAddress: String,
-    img: String,
+    images: 
+        [{
+            image: String
+         }]
+    ,
     users: [{type: Schema.ObjectId, ref: 'users'}],
     rooms: [{type: Schema.ObjectId, ref: 'room'}],
     features: [{type: Schema.ObjectId, ref: 'feature'}],
