@@ -251,7 +251,7 @@ function countUserAdminHotel(req,res){
 }
 
 function countUser(req,res){
-    User.countDocuments({role: 'ROLE_USER'}, (err,users)=>{
+    User.countDocuments({}, (err,users)=>{
         if(err){
             return res.status(500).send({message: 'Error general'})
         }else if(users){
