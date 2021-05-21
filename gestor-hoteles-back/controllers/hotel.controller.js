@@ -112,7 +112,19 @@ function updateHotel(req, res){
                     if(err){
                         return res.status(500).send({ message: 'Error general'});
                     }else if(hotelFind){
-                            return res.send({message: 'Nombre de hotel ya en uso'});
+                        if(hotelFind._id == hotelId){   
+                             Hotel.findByIdAndUpdate(hotelId, update, {new: true}, (err, hotelUpdate)=>{
+                                if(err){
+                                    return res.status(500).send({message: 'Error general al actualizar'});
+                                }else if(hotelUpdate){
+                                    return res.send({message: 'Hotel actualizado', hotelUpdate});
+                                }else{
+                                    return res.send({message: 'No se pudo actualizar al hotel'});
+                                }
+                            })
+                        }else{
+                            return res.send({message: 'Nombre de hotel ya en uso'});    
+                        }
                     }else{
                         Hotel.findByIdAndUpdate(hotelId, update, {new: true}, (err, hotelUpdate)=>{
                             if(err){
@@ -243,7 +255,7 @@ function setRoomHotel(req, res){
                     if(err){
                         return res.status(500).send({message: 'Error general al agregar la habitación'});
                     }else if(pushRoom){
-                        return res.send({message: 'Habitación creada y agregada', pushRoom});
+                        return res.send({message: 'Habitación creada y agregada', pushRoom,roomSaved});
                     }else{
                         return res.status(404).send({message: 'No se seteo la habitación, pero sí se creó en la base de datos'});
                     }
