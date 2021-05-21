@@ -6,7 +6,8 @@ var adminRoutes = require('./routes/admin.route');
 var userRoutes = require('./routes/user.route');
 var addresRoutes = require('./routes/addres.route');
 var roomRoutes = require('./routes/room.route');
-
+var featureRoute = require('./routes/feature.route');
+var hotelRoute = require('./routes/hotel.route');
 var api = express();
 
 api.use(bodyParser.urlencoded({extended: false}));
@@ -24,6 +25,8 @@ api.use('/gestor', userRoutes);
 api.use('/gestor', adminRoutes);
 api.use('/gestor', addresRoutes);
 api.use('/gestor', roomRoutes);
+api.use('/gestor', featureRoute);
+api.use('/gestor', hotelRoute);
 
 
 module.exports = api;

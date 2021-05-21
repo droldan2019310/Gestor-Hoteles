@@ -19,6 +19,7 @@ Model Hotel
 	descAddress
 	img
 	Room[object_Id]
+	Feature
 
 Model Addres --- YAAA
 	department [Guatemala, San marcos, Peten, etc...]
