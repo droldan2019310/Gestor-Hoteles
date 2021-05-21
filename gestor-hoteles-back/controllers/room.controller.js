@@ -1,35 +1,14 @@
 'use strict'
 
 var Room = require('../models/room.model');
+var Hotel = require('../models/hotel.model');
+
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require('../services/jwt');
 
 var fs = require('fs');
 var path = require('path');
 
-function saveRoom(req, res){
-    var room = new Room();
-    var params = req.body;
-    var fileName = 'Sin imagen';
-
-        room.nameRoom = params.nameRoom;
-        room.priceRoom = params.priceRoom;
-        room.descRoom = params.descRoom;
-        room.typeRoom = params.typeRoom;
-        room.amountRoom = params.amountRoom;
-        room.availableRoom = params.amountRoom;
-        room.status = params.status;
-
-        room.save((err, roomSaved)=>{
-            if(err){
-                return res.status(500).send({message: 'Error general al guardar su habitación'});
-            }else if(roomSaved){
-               return res.send({message: 'Se agrego la habitacion correctamente', roomSaved});
-            }else{
-                return res.status(500).send({message: 'No se guardó su habitación'});
-            }
-        })
-}
 
 function uploadImageRoom(req, res){
     var roomId = req.params.id;
@@ -89,46 +68,70 @@ function getImageRoom(req, res){
 }
 
 function updateRoom(req, res){
-    let roomId = req.params.id;
+    let hotelId = req.params.idU;
+    let roomId = req.params.idC;
     let update = req.body;
 
-    if(update.imgRoom){
-        return res.status(402).send({message:'No puede actualizar la imgagen desde esta funcion'});
-    }else{
-    Room.findByIdAndUpdate(roomId, update, {new: true}, (err, roomUpdated)=>{
-        if(err){
-            return res.status(500).send({message: 'Error general al actualizar'});
-        }else if(roomUpdated){
-            return res.send({message: 'Habitacion actualizado', roomUpdated});
-        }else{
-            return res.send({message: 'No se pudo actualizar la habilitacion'});
-        }
-        })
-    }
-            
-    
+        Hotel.findOne({_id: hotelId, rooms: roomId}, (err, roomPull)=>{
+            if(err){
+                    return res.status(500).send({message: 'Error general'});
+                }else if(roomPull){
+                    Room.findByIdAndUpdate(roomId, update, {new: true}, (err, updateRoom)=>{
+                        if(err){
+                            return res.status(500).send({message: 'Error general al actualizar'});
+                        }else if(updateRoom){
+                            return res.send({message: 'Habitación actualizada', updateRoom});
+                        }else{
+                            return res.status(401).send({message: 'No se pudo actualizar la habitación'});
+                        }
+                    })
+                }else{
+                    return res.status(404).send({message: 'Hotel o habitación inexistente'});
+                }
+            }) 
 }
 
 function removeRoom(req, res){
-    let roomeId = req.params.id;
-    let params = req.body;
+    let hotelId = req.params.idU;
+    let roomId = req.params.idC;
+    
+        Hotel.findOneAndUpdate({_id: hotelId, rooms: roomId},{$pull: {rooms: roomId}}, {new:true}, (err, roomPull)=>{
+                if(err){
+                    return res.status(500).send({message: 'Error general'})
+                }else if(roomPull){
+                    Room.findByIdAndRemove(roomId, (err, roomRemoved)=>{
+                        if(err){
+                            return res.status(500).send({message: 'Error general al eliminar la habitación, pero sí eliminado del registro de hotel', err})
+                        }else if(roomRemoved){
+                            return res.send({message: 'Habitación eliminada permanentemente', roomRemoved});
+                        }else{
+                            return res.status(404).send({message: 'Registro no encontrado o ya eliminado'})
+                        }
+                    })
+                }else{
+                    return res.status(404).send({message: 'No existe el hotel que contiene la habitación a eliminar'})
+                }
+            }).populate('rooms')
+}
 
+function getRoomByHotel(req,res){
+    let hotelId = req.params.idU;
 
-    Room.findByIdAndRemove(roomeId, (err, roomDrop)=>{
+    Hotel.findById({_id: hotelId}).populate('rooms').exec((err, hotels)=>{
         if(err){
             return res.status(500).send({message: 'Error general'})
-        }else if(roomDrop){
-            return res.send({message: 'Habitacion eliminado', userRemoved:roomDrop})
+        }else if(hotels){
+            return res.send({message: 'Hoteles encontrados', hotels})
         }else{
-            return res.status(404).send({message: 'Habitacion no encontrada o ya eliminada'})
+            return res.status(404).send({message: 'No hay registros'})
         }
     })
 }
 
 module.exports = {
-    saveRoom,
     getImageRoom,
     uploadImageRoom,
     updateRoom,
-    removeRoom
+    removeRoom,
+    getRoomByHotel
 }

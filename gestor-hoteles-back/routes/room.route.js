@@ -9,12 +9,13 @@ var mdUpload = connectMultiparty({ uploadDir: './uploads/users'});
 
 var api = express.Router();
 
-api.post('/saveRoom', [mdAuth.ensureAuth, mdAuth.ensureAuthAdminHotel] ,roomController.saveRoom); //Guardar una habitacino y agrear a hotel;
 api.put('/:id/uploadImageRoom', [mdAuth.ensureAuth, mdUpload], roomController.uploadImageRoom);
 api.get('/getImageRoom/:fileName', [ mdUpload], roomController.getImageRoom);
-api.put('/updateRoom/:id', [mdAuth.ensureAuth, mdAuth.ensureAuthAdminHotel], roomController.updateRoom); //update de habitacion pero no de imagen
-api.put('/removeRoom/:id', [mdAuth.ensureAuth, mdAuth.ensureAuthAdminHotel], roomController.removeRoom); //eliminar habitacion.
 
+api.put('/:idU/updateRoom/:idC', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], roomController.updateRoom);
+api.put('/:idU/removeRoom/:idC', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], roomController.removeRoom); //eliminar habitacion.
+
+api.get('/:idU/getRoomByHotel', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], roomController.getRoomByHotel);
 
 
 
