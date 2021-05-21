@@ -28,7 +28,7 @@ function saveHotel(req, res){
                 hotel.addres = params.addres;
                 hotel.descAddress = params.descAddress;
                 hotel.description = params.description;
-                
+
                 hotel.save((err, hotelSaved)=>{
                     if(err){
                         return res.status(500).send({message: 'Error general al guardar hotel'});
@@ -93,22 +93,13 @@ function getImage(req, res){
     var fileName = req.params.fileName;
     var pathFile = './uploads/users/' + fileName;
     var params = req.body;
-
-    Hotel.findOne({name: params.name}, (err, hotelFind)=>{
-        if(err){
-            return res.status(500).send({message: 'Error general'});
-        }else if(hotelFind){
-            fs.exists(pathFile, (exists)=>{
-                if(exists){                    
-                    return res.sendFile(path.resolve(pathFile))
-                }else{
-                   return res.status(404).send({message: 'Imagen inexistente'});
-                }
-            })
+        fs.exists(pathFile, (exists)=>{
+        if(exists){
+            return res.sendFile(path.resolve(pathFile))
         }else{
-            return res.status(404).send({message: 'Hotel no encontrado'});
+           return res.status(404).send({message: 'Imagen inexistente'});
         }
-    })    
+    }) 
 }
 
 
