@@ -32,7 +32,7 @@ function saveHotel(req, res){
                     if(err){
                         return res.status(500).send({message: 'Error general al guardar hotel'});
                     }else if(hotelSaved){
-                        return res.send({message: 'Hotel creado exitosamente'});
+                        return res.send({message: 'Hotel creado exitosamente', hotelSaved});
                     }else{
                         return res.status(500).send({message: 'No se guardó el hotel'});
                     }
@@ -175,7 +175,7 @@ function setUserHotel(req,res){
             }else{
                 Hotel.findByIdAndUpdate(hotelId, {$push:{users: userFind._id}}, {new: true}, (err, pushUser)=>{
                     if(err){
-                        return res.status(500).send({username: userFind.username});
+                        return res.status(500).send({message: "error general"});
                     }else if(pushUser){
                         return res.send({message: 'Usuario agregado al hotel', pushUser});
                     }else{
