@@ -9,7 +9,7 @@ var jwt = require('../services/jwt');
 var fs = require('fs');
 var path = require('path');
 
-
+//CRUD HOTELES
 function saveHotel(req, res){
     var hotel = new Hotel();
     var params = req.body;
@@ -59,16 +59,16 @@ function uploadImageHotel(req, res){
 
             var ext = fileName.split('\.');
             var fileExt = ext[1];
-
+            
             if( fileExt == 'png' ||
                 fileExt == 'jpg' ||
                 fileExt == 'jpeg' ||
                 fileExt == 'gif'){
-                    Hotel.findByIdAndUpdate(hotelId, {img: fileName}, {new:true}, (err, hotelUpdate)=>{
+                    Hotel.findByIdAndUpdate(hotelId, {$push:{images:{image: fileName}}}, {new:true}, (err, hotelUpdate)=>{
                         if(err){
-                            return res.status(500).send({message: 'Error general'});
+                            return res.status(500).send({hotel: hotelUpdate});
                         }else if(hotelUpdate){
-                            return res.send({hotel: hotelUpdate, hotelImage: hotelUpdate.img});
+                            return res.send({hotel: hotelUpdate, hotelImage: hotelUpdate.images});
                         }else{
                             return res.status(404).send({message: 'No se actualizó'});
                         }
@@ -87,6 +87,29 @@ function uploadImageHotel(req, res){
         }
 }
 
+function getImage(req, res){
+    var fileName = req.params.fileName;
+    var pathFile = './uploads/users/' + fileName;
+    var params = req.body;
+
+    Hotel.findOne({name: params.name}, (err, hotelFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'});
+        }else if(hotelFind){
+            fs.exists(pathFile, (exists)=>{
+                if(exists){                    
+                    return res.sendFile(path.resolve(pathFile))
+                }else{
+                   return res.status(404).send({message: 'Imagen inexistente'});
+                }
+            })
+        }else{
+            return res.status(404).send({message: 'Hotel no encontrado'});
+        }
+    })    
+}
+
+//Setear usuarios a hotels
 function setUserHotel(req,res){
     var hotelId = req.params.id;
     var params = req.body;
@@ -116,7 +139,7 @@ function setUserHotel(req,res){
     })
 }
 
-
+//Setear servicios a hotels
 function setFeatureHotel(req, res){
     var hotelId = req.params.id;
     var params = req.body;
@@ -158,5 +181,6 @@ module.exports = {
     saveHotel,
     uploadImageHotel,
     setUserHotel,
-    setFeatureHotel
+    setFeatureHotel,
+    getImage
 }
