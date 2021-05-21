@@ -7,11 +7,12 @@ var hotelSchema = Schema({
     name: String,
     phone: Number,
     email: String,
-    nameAdmin: String,
-    address: [{type: Schema.Object_Id, ref:'address'}],
+    addres: String,
     descAddress: String,
     img: String,
-    room: [{type: SchemaObject_Id, ref:'room'}]
+    users: [{type: Schema.ObjectId, ref: 'users'}],
+    rooms: [{type: Schema.ObjectId, ref: 'room'}],
+    features: [{type: Schema.ObjectId, ref: 'feature'}],
 })
 
 module.exports = mongoose.model('hotel', hotelSchema);
