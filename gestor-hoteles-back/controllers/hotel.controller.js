@@ -2,6 +2,7 @@
 
 var Hotel = require('../models/hotel.model.js');
 var User =  require('../models/user.model');
+var Room =  require('../models/room.model');
 var Feature =  require('../models/feature.module.');
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require('../services/jwt');
@@ -109,6 +110,56 @@ function getImage(req, res){
     })    
 }
 
+
+function updateHotel(req, res){
+    let hotelId = req.params.id;
+    let update = req.body;
+
+            if(update.name){
+                Hotel.findOne({name: update.name}, (err, hotelFind)=>{
+                    if(err){
+                        return res.status(500).send({ message: 'Error general'});
+                    }else if(hotelFind){
+                            return res.send({message: 'Nombre de hotel ya en uso'});
+                    }else{
+                        Hotel.findByIdAndUpdate(hotelId, update, {new: true}, (err, hotelUpdate)=>{
+                            if(err){
+                                return res.status(500).send({message: 'Error general al actualizar'});
+                            }else if(hotelUpdate){
+                                return res.send({message: 'Hotel actualizado', hotelUpdate});
+                            }else{
+                                return res.send({message: 'No se pudo actualizar al hotel'});
+                            }
+                        })
+                    }
+                })
+            }else{
+                Hotel.findByIdAndUpdate(hotelId, update, {new: true}, (err, hotelUpdate)=>{
+                    if(err){
+                        return res.status(500).send({message: 'Error general al actualizar'});
+                    }else if(hotelUpdate){
+                        return res.send({message: 'Hotel actualizado', hotelUpdate});
+                    }else{
+                        return res.send({message: 'No se pudo actualizar al hotel'});
+                    }
+                })
+            }
+}
+
+function removeHotel(req, res){
+    let hotelId = req.params.id;
+    
+    Hotel.findByIdAndRemove(hotelId, (err, hotelFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'})
+        }else if(hotelFind){
+            return res.send({message: 'Hotel eliminado', hotelDrop:hotelFind})
+        }else{
+            return res.status(404).send({message: 'Hotel no encontrado o ya eliminado'})
+        }
+    })
+}
+
 //Setear usuarios a hotels
 function setUserHotel(req,res){
     var hotelId = req.params.id;
@@ -176,11 +227,52 @@ function setFeatureHotel(req, res){
     }
 }
 
+//setear cuartos a hoteles
+function setRoomHotel(req, res){
+    var hotelId = req.params.id;
+    var params = req.body;
+    var room = new Room();
+
+    if(params.nameRoom && params.priceRoom && params.descRoom && params.typeRoom && params.amountRoom){
+                
+        room.nameRoom = params.nameRoom;
+        room.priceRoom = params.priceRoom;
+        room.descRoom = params.descRoom;
+        room.typeRoom = params.typeRoom;
+        room.amountRoom = params.amountRoom;
+        room.availableRoom = params.amountRoom;
+        room.status = params.status;
+
+        room.save((err, featureSaved)=>{
+            if(err){
+                return res.status(500).send({message: 'Error general'});
+            }else if(featureSaved){
+                Hotel.findByIdAndUpdate(hotelId, {$push:{features: featureSaved._id}}, {new: true}, (err, pushFeature)=>{
+                    if(err){
+                        return res.status(500).send({message: 'Error general al setear el servicio'});
+                    }else if(pushFeature){
+                        return res.send({message: 'Servicio creado y agregado', pushFeature});
+                    }else{
+                        return res.status(404).send({message: 'No se seteo el servicio, pero sí se creó en la BD'});
+                    }
+                }).populate('features')
+            }else{
+                return res.status(500).send({message: 'No se guardó el servicio'});
+            }
+        })
+    }else{
+        return res.status(401).send({message: 'Por favor envía los datos mínimos para la de tu servicio'})   
+    }
+}
+
 
 module.exports = {
     saveHotel,
     uploadImageHotel,
     setUserHotel,
     setFeatureHotel,
-    getImage
+    getImage,
+    updateHotel,
+    removeHotel,
+    setRoomHotel
 }

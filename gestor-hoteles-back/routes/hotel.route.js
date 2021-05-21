@@ -10,10 +10,15 @@ var mdUpload = connectMultiparty({ uploadDir: './uploads/users'});
 var api = express.Router();
 
 api.post('/saveHotel',[mdAuth.ensureAuth, mdAuth.ensureAuthAdmin],hotelController.saveHotel); //Guardar un hotel.
-api.put('/:id/uploadImageHotel', [mdAuth.ensureAuth, mdUpload], hotelController.uploadImageHotel);
-api.put('/:id/setUserHotel',[mdAuth.ensureAuth, mdAuth.ensureAuthAdmin],mdAuth.ensureAuth, hotelController.setUserHotel);
-api.put('/:id/setFeatureHotel', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin],mdAuth.ensureAuth, hotelController.setFeatureHotel);
+api.put('/updateHotel/:id',[mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], hotelController.updateHotel); //Actualizar todos los datos de un hotel
+api.put('/removeHotel/:id',[mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], hotelController.removeHotel);
+
+api.put('/:id/uploadImageHotel', [mdAuth.ensureAuth, mdUpload], hotelController.uploadImageHotel); //Agregar o actualizar imagenes de un hotel.
 api.put('/getImage/:fileName', [ mdUpload], hotelController.getImage);
+
+api.put('/:id/setUserHotel',[mdAuth.ensureAuth, mdAuth.ensureAuthAdmin],mdAuth.ensureAuth, hotelController.setUserHotel); // Agregar administrador al hotel.
+api.put('/:id/setFeatureHotel', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin],mdAuth.ensureAuth, hotelController.setFeatureHotel); //Agregar servicios a un hotel.
+
 
 
 

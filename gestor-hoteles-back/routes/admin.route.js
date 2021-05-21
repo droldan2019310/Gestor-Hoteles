@@ -13,6 +13,7 @@ api.put('/updateUserAdmin/:id', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], adm
 api.put('/removeUser/:id', mdAuth.ensureAuth, adminController.removeUser); //eliminar habilidato para todos los usuarios.
 api.get('/getUsers', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], adminController.getUsers); //obtener todos los user. Opcion habil solo para admin.
 api.post('/search', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], adminController.search) //Buscar user. Opcion habil solo para admin.\
+api.get('/getUsersAdminHotel', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], adminController.getUsersAdminHotel); //obtener todos los user. Opcion habil solo para admin.
 
 
 module.exports = api;

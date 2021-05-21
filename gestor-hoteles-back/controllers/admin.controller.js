@@ -188,6 +188,19 @@ function getUsers(req, res){
     })
 }
 
+function getUsersAdminHotel(req, res){
+
+    User.find({role:'ROLE_ADMINHOTEL'}).exec((err, users)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'})
+        }else if(users){
+            return res.send({message: 'Usuarios encontrados', users})
+        }else{
+            return res.status(404).send({message: 'No hay registros'})
+        }
+    })
+}
+
 function search(req, res){
     var params = req.body;
 
@@ -214,5 +227,6 @@ module.exports = {
     updateUserAdmin,
     removeUser,
     getUsers,
-    search
+    search,
+    getUsersAdminHotel
 }
