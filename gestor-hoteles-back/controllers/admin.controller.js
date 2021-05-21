@@ -44,6 +44,8 @@ function saveUserAdmin(req, res){
             }
         })
 
+    }else{
+       return res.status(403).send({message: 'Ingresa todos los datos obligatorios'});     
     }
 }
 

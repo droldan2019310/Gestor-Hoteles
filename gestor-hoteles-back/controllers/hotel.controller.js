@@ -15,7 +15,7 @@ function saveHotel(req, res){
     var hotel = new Hotel();
     var params = req.body;
 
-    if(params.name && params.phone && params.email && params.addres){
+    if(params.name && params.phone && params.email && params.addres && params.description){
         Hotel.findOne({name: params.name}, (err, hotelFind)=>{
             if(err){
                 return res.status(500).send({message: 'Erro general en el servidor'});
@@ -27,7 +27,8 @@ function saveHotel(req, res){
                 hotel.email = params.email;
                 hotel.addres = params.addres;
                 hotel.descAddress = params.descAddress;
-
+                hotel.description = params.description;
+                
                 hotel.save((err, hotelSaved)=>{
                     if(err){
                         return res.status(500).send({message: 'Error general al guardar hotel'});

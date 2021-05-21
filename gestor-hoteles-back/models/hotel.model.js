@@ -8,6 +8,7 @@ var hotelSchema = Schema({
     phone: Number,
     email: String,
     addres: String,
+    description: String,
     descAddress: String,
     images: 
         [{
