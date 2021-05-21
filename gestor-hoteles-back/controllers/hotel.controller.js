@@ -243,25 +243,25 @@ function setRoomHotel(req, res){
         room.availableRoom = params.amountRoom;
         room.status = params.status;
 
-        room.save((err, featureSaved)=>{
+        room.save((err, roomSaved)=>{
             if(err){
                 return res.status(500).send({message: 'Error general'});
-            }else if(featureSaved){
-                Hotel.findByIdAndUpdate(hotelId, {$push:{features: featureSaved._id}}, {new: true}, (err, pushFeature)=>{
+            }else if(roomSaved){
+                Hotel.findByIdAndUpdate(hotelId, {$push:{rooms: roomSaved._id}}, {new: true}, (err, pushRoom)=>{
                     if(err){
-                        return res.status(500).send({message: 'Error general al setear el servicio'});
-                    }else if(pushFeature){
-                        return res.send({message: 'Servicio creado y agregado', pushFeature});
+                        return res.status(500).send({message: 'Error general al agregar la habitación'});
+                    }else if(pushRoom){
+                        return res.send({message: 'Habitación creada y agregada', pushRoom});
                     }else{
-                        return res.status(404).send({message: 'No se seteo el servicio, pero sí se creó en la BD'});
+                        return res.status(404).send({message: 'No se seteo la habitación, pero sí se creó en la base de datos'});
                     }
-                }).populate('features')
+                }).populate('rooms')
             }else{
                 return res.status(500).send({message: 'No se guardó el servicio'});
             }
         })
     }else{
-        return res.status(401).send({message: 'Por favor envía los datos mínimos para la de tu servicio'})   
+        return res.status(401).send({message: 'Por favor envía los datos mínimos para la creación de tu habitación'})   
     }
 }
 

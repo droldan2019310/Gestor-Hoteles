@@ -18,6 +18,7 @@ api.put('/getImage/:fileName', [ mdUpload], hotelController.getImage);
 
 api.put('/:id/setUserHotel',[mdAuth.ensureAuth, mdAuth.ensureAuthAdmin],mdAuth.ensureAuth, hotelController.setUserHotel); // Agregar administrador al hotel.
 api.put('/:id/setFeatureHotel', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin],mdAuth.ensureAuth, hotelController.setFeatureHotel); //Agregar servicios a un hotel.
+api.put('/:id/setRoomHotel', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin],mdAuth.ensureAuth, hotelController.setRoomHotel); //Agregar servicios a un hotel.
 
 
 
