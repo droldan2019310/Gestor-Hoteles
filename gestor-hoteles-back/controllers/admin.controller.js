@@ -219,6 +219,45 @@ function search(req, res){
     }else{
         return res.status(403).send({message: 'Ingresa algún dato en el campo de búsqueda'})
     }
+
+
+}
+
+
+function countUserAdmin(req,res){
+    User.countDocuments({role: 'ROLE_ADMIN'}, (err,users)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'})
+        }else if(users){
+            return res.send({message: 'Usuarios encontrados', countUsers: users})
+        }else{
+            return res.status(404).send({message: 'No hay registros'})
+        }
+    })
+}
+
+function countUserAdminHotel(req,res){
+    User.countDocuments({role: 'ROLE_ADMINHOTEL'}, (err,users)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'})
+        }else if(users){
+            return res.send({message: 'Usuarios encontrados', countUsers: users})
+        }else{
+            return res.status(404).send({message: 'No hay registros'})
+        }
+    })
+}
+
+function countUser(req,res){
+    User.countDocuments({role: 'ROLE_USER'}, (err,users)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'})
+        }else if(users){
+            return res.send({message: 'Usuarios encontrados', countUsers: users})
+        }else{
+            return res.status(404).send({message: 'No hay registros'})
+        }
+    })
 }
 
 module.exports = {
@@ -228,5 +267,8 @@ module.exports = {
     removeUser,
     getUsers,
     search,
-    getUsersAdminHotel
+    getUsersAdminHotel,
+    countUserAdmin,
+    countUser,
+    countUserAdminHotel
 }
