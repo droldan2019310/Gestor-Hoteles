@@ -203,6 +203,36 @@ function reservsByHotel(req, res){
     })
 }
 
+function reservsAddHotel(req,res){
+    let hotelId = req.params.id;
+    let update = req.body;
+    let cantidad = 1;
+
+    Hotel.findById(hotelId, (err, hotelFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general1'})
+        }else if(hotelFind){
+            if(hotelFind.cantReservs*1 >= 0){
+                cantidad = hotelFind.cantReservs*1;
+            }else{
+                cantidad = 1;
+            }
+            
+            update.cantReservs = (cantidad*1)+1;
+
+            Hotel.findByIdAndUpdate(hotelId, update, {new: true}, (err, hotelUpdated)=>{
+                if(err){
+                    return res.status(500).send({message: 'Error general al actualizar'});
+                }else if(hotelUpdated){
+                    return res.send({message: 'cantidad de reservaciones: ',hotelUpdated});
+                }else{
+                    return res.send({message: 'No se pudo actualizar'});
+                }
+            })        }else{
+            return res.status(404).send({message: 'No hay registros'})
+        }
+    })
+}
 module.exports = {
     saveReservation,
     availableRoom,
@@ -210,6 +240,6 @@ module.exports = {
     updateReservation,
     cancerlarRevserv,
     countReserv,
-    reservsByHotel
-
+    reservsByHotel,
+    reservsAddHotel
 }

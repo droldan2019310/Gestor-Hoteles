@@ -16,6 +16,7 @@ api.put('/cancerlarRevserv/:id',mdAuth.ensureAuth, reservationController.cancerl
 
 api.get('/countReserv', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], reservationController.countReserv); //obtener todos los user. Opcion habil solo para admin.
 api.put('/reservsByHotel/:id',mdAuth.ensureAuth, reservationController.reservsByHotel); //Eliminar la reservación
+api.put('/reservsAddHotel/:id',mdAuth.ensureAuth, reservationController.reservsAddHotel); //count de reservaciones
 
 
 
