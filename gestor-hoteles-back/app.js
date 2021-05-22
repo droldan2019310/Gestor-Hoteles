@@ -8,6 +8,10 @@ var addresRoutes = require('./routes/addres.route');
 var roomRoutes = require('./routes/room.route');
 var featureRoute = require('./routes/feature.route');
 var hotelRoute = require('./routes/hotel.route');
+var resevRoute = require('./routes/reservation.route');
+var invoiceRoute = require('./routes/invoice.route');
+
+
 var api = express();
 
 api.use(bodyParser.urlencoded({extended: false}));
@@ -27,6 +31,7 @@ api.use('/gestor', addresRoutes);
 api.use('/gestor', roomRoutes);
 api.use('/gestor', featureRoute);
 api.use('/gestor', hotelRoute);
-
+api.use('/gestor', resevRoute);
+api.use('/gestor', invoiceRoute);
 
 module.exports = api;

@@ -9,6 +9,7 @@ var invoiceSchema = Schema({
     date: new Date(),
     users: [{type: Schema.ObjectId, ref: 'user'}],
     features: [{type: Schema.ObjectId, ref: 'feature'}],
+    reservation: [{type: Schema.ObjectId, ref: 'reservations'}],
     totalNet: Number,
     total: Number,
     cash: Number,
