@@ -217,7 +217,7 @@ function setFeatureHotel(req, res){
                     if(err){
                         return res.status(500).send({message: 'Error general al setear el servicio'});
                     }else if(pushFeature){
-                        return res.send({message: 'Servicio creado y agregado', pushFeature});
+                        return res.send({message: 'Servicio creado y agregado', pushFeature, featureSaved});
                     }else{
                         return res.status(404).send({message: 'No se seteo el servicio, pero sí se creó en la BD'});
                     }
@@ -285,7 +285,7 @@ function findUserByHotel(req, res){
                 }else{
                     return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
                 }
-            })
+            }).populate("features")
         }else {
             return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
         }
