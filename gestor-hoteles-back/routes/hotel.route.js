@@ -23,7 +23,7 @@ api.put('/:id/setRoomHotelAdmin', [mdAuth.ensureAuth, mdAuth.ensureAuthAdminHote
 
 api.put('/findUserByHotel/:idU', [mdAuth.ensureAuth, mdAuth.ensureAuthAdminHotel],mdAuth.ensureAuth, hotelController.findUserByHotel); //Agregar servicios a un hotel.
 
-api.get('/best3Hotel',mdAuth.ensureAuth, hotelController.best3Hotel); //Mejores 3 hoteles. 
-api.get('/best1Hotel',mdAuth.ensureAuth, hotelController.best1Hotel); // mejor hotel. 
+api.get('/best3Hotel', hotelController.best3Hotel); //Mejores 3 hoteles. 
+api.get('/best1Hotel', hotelController.best1Hotel); // mejor hotel. 
 
 module.exports = api;
