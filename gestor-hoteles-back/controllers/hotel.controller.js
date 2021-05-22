@@ -294,6 +294,33 @@ function findUserByHotel(req, res){
 
 }
 
+function best3Hotel(req,res){
+    var mysort = { name: +1 };
+
+    Hotel.find({}, (err,hotelFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'});
+        }else if(hotelFind){
+            return res.send({message: 'Hotel encontrado', hotelFind});
+        }else{
+            return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
+        }
+    }).limit(3).sort(mysort)
+}
+
+
+function best1Hotel(req,res){
+    Hotel.find({}, (err,hotelFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'});
+        }else if(hotelFind){
+            return res.send({message: 'Hotel encontrado', hotelFind});
+        }else{
+            return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
+        }
+    }).limit(1)
+}
+
 module.exports = {
     saveHotel,
     uploadImageHotel,
@@ -303,5 +330,7 @@ module.exports = {
     updateHotel,
     removeHotel,
     setRoomHotel,
-    findUserByHotel
+    findUserByHotel,
+    best3Hotel,
+    best1Hotel
 }
