@@ -305,7 +305,7 @@ function best3Hotel(req,res){
         }else{
             return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
         }
-    }).limit(3).sort(mysort)
+    }).limit(3).sort(mysort).populate("rooms")
 }
 
 
