@@ -270,6 +270,30 @@ function setRoomHotel(req, res){
 }
 
 
+function findUserByHotel(req, res){
+    let userId = req.params.idU;
+
+    User.findById(userId, (err, userFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'});
+        }else if(userFind){
+            Hotel.findOne({users: userFind._id}, (err, hotelFind)=>{
+                if(err){
+                    return res.status(500).send({message: 'Error general'});
+                }else if(hotelFind){
+                    return res.send({message: 'Hotel encontrado', hotelFind});
+                }else{
+                    return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
+                }
+            })
+        }else {
+            return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
+        }
+
+    })
+
+}
+
 module.exports = {
     saveHotel,
     uploadImageHotel,
@@ -278,5 +302,6 @@ module.exports = {
     getImage,
     updateHotel,
     removeHotel,
-    setRoomHotel
+    setRoomHotel,
+    findUserByHotel
 }
