@@ -25,5 +25,6 @@ api.put('/findUserByHotel/:idU', [mdAuth.ensureAuth, mdAuth.ensureAuthAdminHotel
 
 api.get('/best3Hotel', hotelController.best3Hotel); //Mejores 3 hoteles. 
 api.get('/best1Hotel', hotelController.best1Hotel); // mejor hotel. 
-
+api.get('/getHotels', hotelController.getHotels);
+api.get('/searchHotel/:HotelId', hotelController.searchHotel);
 module.exports = api;

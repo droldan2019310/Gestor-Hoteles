@@ -17,6 +17,8 @@ api.get('/getImageFeature/:fileName', [ mdUpload], featureController.getImageFea
 
 api.get('/:idU/getFeatureByHotel', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], featureController.getFeatureByHotel);
 
+api.get('/:idU/getFeatureByHotelHome',  featureController.getFeatureByHotel);
+
 
 
 module.exports = api;

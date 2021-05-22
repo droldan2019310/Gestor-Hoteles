@@ -318,9 +318,31 @@ function best1Hotel(req,res){
         }else{
             return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
         }
-    }).limit(1)
+    }).limit(1).populate("rooms")
 }
-
+function getHotels(req,res){
+    Hotel.find({}, (err,hotelFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'});
+        }else if(hotelFind){
+            return res.send({message: 'Hotel encontrado', hotelFind});
+        }else{
+            return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
+        }
+    }).populate("rooms")
+}
+function searchHotel(req,res){
+    let id = req.params.HotelId;
+    Hotel.findById(id, (err,hotelFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'});
+        }else if(hotelFind){
+            return res.send({message: 'Hotel encontrado', hotelFind});
+        }else{
+            return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
+        }
+    }).populate("rooms")
+}
 module.exports = {
     saveHotel,
     uploadImageHotel,
@@ -332,5 +354,7 @@ module.exports = {
     setRoomHotel,
     findUserByHotel,
     best3Hotel,
-    best1Hotel
+    best1Hotel,
+    getHotels,
+    searchHotel
 }
