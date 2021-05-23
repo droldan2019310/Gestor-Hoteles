@@ -238,7 +238,7 @@ function reservsByHotel(req, res){
                 }else{
                     return res.status(404).send({message: 'No hay registros 2'})
                 }
-            })
+            }).populate("rooms")
         }else{
             return res.status(404).send({message: 'No hay registros 1 '})
         }

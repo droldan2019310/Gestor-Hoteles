@@ -15,14 +15,15 @@ api.post('/availableRoom/:idH/:idR',mdAuth.ensureAuth, reservationController.ava
 api.put('/cancerlarRevserv/:id',mdAuth.ensureAuth, reservationController.cancerlarRevserv); //Cancelar reservación.(aplicar mecanismo para que takeRoom-1 and availableRoom+1)
 
 api.get('/countReserv/', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], reservationController.countReserv); //obtener todos los user. Opcion habil solo para admin.
-api.put('/reservsByHotel/:id',mdAuth.ensureAuth, reservationController.reservsByHotel); //Eliminar la reservación
+api.get('/reservsByHotel/:id',mdAuth.ensureAuth, reservationController.reservsByHotel); //Eliminar la reservación
+
 api.put('/reservsAddHotel/:id',mdAuth.ensureAuth, reservationController.reservsAddHotel); //count de reservaciones
 
 api.get('/countReservByHotel/:idHotel', [mdAuth.ensureAuth, mdAuth.ensureAuthAdminHotel], reservationController.countReservByHotel); //obtener todos los user. Opcion habil solo para admin.
 api.get('/reservsByUser/:id',mdAuth.ensureAuth, reservationController.reservsByUser); //count de reservaciones
 
 api.get('/best3HotelCount',mdAuth.ensureAuth, reservationController.best3HotelCount); //Mejores 3 hoteles. 
-api.put('/usersByHotelCount/:id',mdAuth.ensureAuth, reservationController.usersByHotelCount); //count de reservaciones
+api.get('/usersByHotelCount/:id',mdAuth.ensureAuth, reservationController.usersByHotelCount); //count de reservaciones
 
 api.put('/updateCantHotel/:id',mdAuth.ensureAuth, reservationController.updateHotelCant);
 

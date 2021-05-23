@@ -10,7 +10,7 @@ api.post('/saveInvoice/:idU/:idR',mdAuth.ensureAuth, invoiceController.saveInvoi
 api.put('/updateInvoice/:idU/:idF',mdAuth.ensureAuth, invoiceController.updateInvoice); //Update de factura para object id de servicios
 api.get('/invoiceGet/:id',mdAuth.ensureAuth, invoiceController.invoicesByUser);
 api.get('/invoiceGetFeature/:id',mdAuth.ensureAuth, invoiceController.invoicesByUserFeature);
-
+api.get('/invoiceByHotel/:id',mdAuth.ensureAuth, invoiceController.invoiceByHotel); //Eliminar la reservación
 api.put('/transInvoice/:idI',mdAuth.ensureAuth, invoiceController.transInvoice); //Transferir backup 
 api.put('/payInvoice/:id/:idI',mdAuth.ensureAuth, invoiceController.payInvoice); //pagar factura
 api.put('/listInvoiceByUser/:id',mdAuth.ensureAuth, invoiceController.listInvoiceByUser); //listar las facturas de dicho usuario

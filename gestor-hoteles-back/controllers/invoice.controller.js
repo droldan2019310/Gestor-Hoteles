@@ -20,7 +20,11 @@ function saveInvoice(req, res){
         invoice.number = Math.random(); 
         invoice.serie = 'A1';
         invoice.date = params.date;
-
+        invoice.hotels = params.hotel;
+        invoice.totalNet = params.totalNet;
+        invoice.total = params.total;
+        invoice.hotel = params.hotel;
+        invoice.status = "PENDIENTE";
         invoice.save((err, invoiceSaved)=>{
             if(err){
                 return res.status(500).send({message: 'Error general al añadir factura'});
@@ -155,8 +159,8 @@ function payInvoice(req, res){
     let invoiceId = req.params.idI;
     let update = req.body;
 
-
-    Invoice.find({users: userId, _id:invoiceId}, (err, InvoiceFind)=>{
+    update.status = "PAGADA"
+    Invoice.findOne({users: userId, _id:invoiceId}, (err, InvoiceFind)=>{
         if(err){
             return res.status(500).send({message: 'Error general al realizar la busqueda'})
         }else if(InvoiceFind){
@@ -174,6 +178,27 @@ function payInvoice(req, res){
         }
     })
 
+}
+function invoiceByHotel(req, res){
+    let hotelId = req.params.id;
+
+    Hotel.findById(hotelId, (err, hotelFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'})
+        }else if(hotelFind){
+            Invoice.find({hotels: hotelFind._id}, (err, invoiceFind)=>{
+                if(err){
+                    return res.status(500).send({message: 'Error general'})
+                }else if(invoiceFind){
+                    return res.send({message: 'Facturas encontradas encontrados', invoiceFind})
+                }else{
+                    return res.status(404).send({message: 'No hay registros de facturas'})
+                }
+            }).populate("users")
+        }else{
+            return res.status(404).send({message: 'No hay registros de hoteles'})
+        }
+    })
 }
 function invoicesByUser(req,res){
     let userId = req.params.id;
@@ -214,5 +239,6 @@ module.exports = {
     payInvoice,
     invoicesByUser,
     transInvoice,
+    invoiceByHotel,
     invoicesByUserFeature
 }
