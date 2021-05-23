@@ -310,7 +310,7 @@ function best3Hotel(req,res){
 
 
 function best1Hotel(req,res){
-    Hotel.find({}, (err,hotelFind)=>{
+    Hotel.findOne({}, (err,hotelFind)=>{
         if(err){
             return res.status(500).send({message: 'Error general'});
         }else if(hotelFind){

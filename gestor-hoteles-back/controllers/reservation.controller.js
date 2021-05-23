@@ -46,24 +46,29 @@ function saveReservation(req, res){
                                             if(err){
                                                 return res.status(500).send({message: 'Error general al buscar su reservacion'});
                                             }else if(reservComplete){
-                                                return res.send({reservationComplete: reservComplete});
+                                                return res.send({message:"se registró tu reservación",reservationComplete: reservComplete});
                                             }else{
+
                                                 return res.status(500).send({message: 'No se encontro su reservacion'});
                                             }
                                         })
                                         }else{
+                                            
                                         return res.status(402).send({message: 'No se encontro ninguna habitacion'});
                                     }
                                 })
                             }else{
+                                
                                 return res.status(402).send({message: 'No se guardó su reservación'});
                             }
                         })
                     }else{
+                        
                         return res.status(500).send({message: 'No se guardó el usuario'});
                     }
                 })
             }else{
+                
                 return res.status(500).send({message: 'No se guardó su reservación'});
             }
         })
@@ -181,6 +186,20 @@ function countReserv(req,res){
     })
 }
 
+function countReservByHotel(req,res){
+   let hotelId = req.params.idHotel;
+    Reservation.countDocuments({hotels: hotelId}, (err,reservs)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'})
+        }else if(reservs){
+            return res.send({message: 'Reservaciones encontrados', countReservs: reservs})
+        }else{
+            return res.status(404).send({message: 'No hay registros'})
+        }
+    })
+}
+
+
 function reservsByHotel(req, res){
     let hotelId = req.params.id;
 
@@ -241,5 +260,6 @@ module.exports = {
     cancerlarRevserv,
     countReserv,
     reservsByHotel,
-    reservsAddHotel
+    reservsAddHotel,
+    countReservByHotel
 }
