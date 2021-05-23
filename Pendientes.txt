@@ -1,10 +1,10 @@
 - listar Facturas de dicho hotel
-- editar factura
-- agregar servicio a la factura
+
 - buscar factura por usuario
 
 -Listar facturas por usuario
-- generar factura
+
+
 - pagar factura
 
 

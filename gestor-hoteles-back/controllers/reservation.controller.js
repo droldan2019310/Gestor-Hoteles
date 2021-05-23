@@ -248,6 +248,41 @@ function reservsByUser(req,res){
 
     })
 }
+
+
+function best3HotelCount(req,res){
+    var mysort = { name: +1 };
+    let hotelId = req.params.id;
+
+            Reservation.countDocuments({}, (err,reservFind)=>{
+                if(err){
+                    return res.status(500).send({message: 'Error general'});
+                }else if(reservFind){
+                    return res.send({message: 'cantidad de reservaciones: ',reservFind});
+                }else{
+                    return res.status(404).send({message: 'No hay registros'})
+                }
+            }).populate("hotels")       
+}
+
+
+function usersByHotelCount(req, res){
+    let hotelId = req.params.id;
+    var cant = 1*1;
+    var cant2 = 1*1;
+    var reservation = new Reservation();
+
+    Reservation.find({hotels: hotelId},(err, reservFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'});
+        }else if(reservFind){
+            return res.send({message: 'registros', huspedes:reservFind})
+        }else{
+            return res.status(404).send({message: 'No hay registros'})
+        }
+            })
+}
+
 module.exports = {
     saveReservation,
     availableRoom,
@@ -257,5 +292,7 @@ module.exports = {
     countReserv,
     reservsByHotel,
     reservsAddHotel,
-    reservsByUser
+    reservsByUser,
+    best3HotelCount,
+    usersByHotelCount
 }

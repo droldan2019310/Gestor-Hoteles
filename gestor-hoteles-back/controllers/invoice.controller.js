@@ -120,8 +120,69 @@ function transInvoice(req,res){
     })
 }
 
+//Esta busqueda se realiza en el modelo de invoiceBackup
+function listInvoiceByUser(req, res){
+    let userId = req.params.id;
+
+    InvoiceBackup.find({users: userId}, (err, InvoiceFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general al realizar la busqueda'})
+        }else if(InvoiceFind){
+            return res.send({message: 'Factura encontrada',InvoiceFind });
+        }else{
+            return res.status(404).send({message: 'No se pudo realizar la busqueda'})
+        }
+    })
+}
+
+//Esta busqueda se realiza en el modelo de invoiceBackup
+function SearchInvoiceByUser(req, res){
+    let userId = req.params.id;
+    let invoiceId = req.params.idI;
+
+    InvoiceBackup.find({users: userId, _id:invoiceId}, (err, InvoiceFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general al realizar la busqueda'})
+        }else if(InvoiceFind){
+            return res.send({message: 'Factura encontrada',InvoiceFind });
+        }else{
+            return res.status(404).send({message: 'No se pudo realizar la busqueda'})
+        }
+    })
+
+}
+
+function payInvoice(req, res){
+    let userId = req.params.id;
+    let invoiceId = req.params.idI;
+    let update = req.body;
+
+
+    Invoice.find({users: userId, _id:invoiceId}, (err, InvoiceFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general al realizar la busqueda'})
+        }else if(InvoiceFind){
+            Invoice.findByIdAndUpdate(InvoiceFind._id, update, {new: true}, (err, invoiceUpdate)=>{
+                if(err){
+                    return res.status(500).send({message: 'Error general al actualizar'});
+                }else if(invoiceUpdate){
+                    return res.send({message: 'Factura pagada', invoiceUpdate});
+                }else{
+                    return res.send({message: 'No se pudo actualizar'});
+                }
+            })
+        }else{
+            return res.status(404).send({message: 'No se pudo realizar la busqueda'})
+        }
+    })
+
+}
+
 module.exports = {
     saveInvoice,
     updateInvoice,
-    transInvoice
+    transInvoice,
+    listInvoiceByUser,
+    SearchInvoiceByUser,
+    payInvoice
 }
