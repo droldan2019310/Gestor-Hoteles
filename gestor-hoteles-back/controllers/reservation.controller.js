@@ -76,7 +76,30 @@ function saveReservation(req, res){
         return res.status(401).send({message: 'Por favor envía los datos mínimos para la creación de tu reservación'})   
     }
 }
-  
+
+function updateHotelCant(req,res){
+    let update = req.body;
+    
+    let idHotel = req.params.id;
+    Hotel.findById(idHotel, (err, hotelFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'});
+        }else if(hotelFind){
+            update.cantReservs = hotelFind.cantReservs + 1;;
+            Hotel.findByIdAndUpdate(idHotel,update,{new:true},(err,hotelUpdate)=>{
+                 if(err){
+                    return res.status(500).send({message: 'Error general al actualizar'});
+                }else if(hotelUpdate){
+                    return res.send({message: 'Hotel actualizado', hotelUpdate});
+                }else{
+                    return res.send({message: 'No se pudo actualizar'});
+                }
+            })
+        }else{
+            return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
+        }
+    }).populate("features");
+}
 
 function updateReservation(req, res){
     let reservId = req.params.id;
@@ -316,4 +339,5 @@ module.exports = {
     usersByHotelCount,
     countReservByHotel,
     reservsAddHotel,
+    updateHotelCant
 }

@@ -189,6 +189,22 @@ function invoicesByUser(req,res){
 
     }).populate("reservations")
 }
+
+function invoicesByUserFeature(req,res){
+    let userId = req.params.id;
+
+    Invoice.find({users: userId}, (err, invoicesFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'});
+        }else if(invoicesFind){
+            return res.send({message: 'cantidad de reservaciones: ',invoicesFind});
+        }else{
+            return res.status(404).send({message: 'No hay registros'})
+        }
+
+    }).populate("features")
+}
+
 module.exports = {
     saveInvoice,
     updateInvoice,
@@ -198,4 +214,5 @@ module.exports = {
     payInvoice,
     invoicesByUser,
     transInvoice,
+    invoicesByUserFeature
 }

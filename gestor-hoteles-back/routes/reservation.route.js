@@ -24,6 +24,7 @@ api.get('/reservsByUser/:id',mdAuth.ensureAuth, reservationController.reservsByU
 api.get('/best3HotelCount',mdAuth.ensureAuth, reservationController.best3HotelCount); //Mejores 3 hoteles. 
 api.put('/usersByHotelCount/:id',mdAuth.ensureAuth, reservationController.usersByHotelCount); //count de reservaciones
 
+api.put('/updateCantHotel/:id',mdAuth.ensureAuth, reservationController.updateHotelCant);
 
 module.exports = api;
 

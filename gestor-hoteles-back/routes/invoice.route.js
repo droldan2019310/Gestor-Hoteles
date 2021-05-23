@@ -9,6 +9,7 @@ var api = express.Router();
 api.post('/saveInvoice/:idU/:idR',mdAuth.ensureAuth, invoiceController.saveInvoice); //Agregar factura con objectid de de reservacoin
 api.put('/updateInvoice/:idU/:idF',mdAuth.ensureAuth, invoiceController.updateInvoice); //Update de factura para object id de servicios
 api.get('/invoiceGet/:id',mdAuth.ensureAuth, invoiceController.invoicesByUser);
+api.get('/invoiceGetFeature/:id',mdAuth.ensureAuth, invoiceController.invoicesByUserFeature);
 
 api.put('/transInvoice/:idI',mdAuth.ensureAuth, invoiceController.transInvoice); //Transferir backup 
 api.put('/payInvoice/:id/:idI',mdAuth.ensureAuth, invoiceController.payInvoice); //pagar factura
