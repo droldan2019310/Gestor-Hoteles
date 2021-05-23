@@ -3,7 +3,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var invoiceSchema = Schema({
+
+var invoiceBackupSchema = Schema({
     number: Number,    
     serie: String,
     date: Date,
@@ -16,4 +17,4 @@ var invoiceSchema = Schema({
     remaining: Number
 })
 
-module.exports = mongoose.model('invoice', invoiceSchema);
+module.exports = mongoose.model('invoicebackup', invoiceBackupSchema);
