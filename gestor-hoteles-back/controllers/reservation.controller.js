@@ -233,6 +233,21 @@ function reservsAddHotel(req,res){
         }
     })
 }
+
+function reservsByUser(req,res){
+    let userId = req.params.id;
+
+    Reservation.find({users: userId}, (err, reservsFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'});
+        }else if(reservsFind){
+            return res.send({message: 'cantidad de reservaciones: ',reservsFind});
+        }else{
+            return res.status(404).send({message: 'No hay registros'})
+        }
+
+    })
+}
 module.exports = {
     saveReservation,
     availableRoom,
@@ -241,5 +256,6 @@ module.exports = {
     cancerlarRevserv,
     countReserv,
     reservsByHotel,
-    reservsAddHotel
+    reservsAddHotel,
+    reservsByUser
 }

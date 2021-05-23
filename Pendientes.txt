@@ -3,13 +3,6 @@
 - agregar servicio a la factura
 - buscar factura por usuario
 
-
-
-
-- ver cual es el mejor hotel devolviendo su nombre y datos
-- mejores 3 hoteles devolviendo sus datos y numero de reservaciones
-
-
 -Listar facturas por usuario
 - generar factura
 - pagar factura

@@ -18,6 +18,8 @@ api.get('/countReserv', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], reservation
 api.put('/reservsByHotel/:id',mdAuth.ensureAuth, reservationController.reservsByHotel); //Eliminar la reservación
 api.put('/reservsAddHotel/:id',mdAuth.ensureAuth, reservationController.reservsAddHotel); //count de reservaciones
 
+api.put('/reservsByUser/:id',mdAuth.ensureAuth, reservationController.reservsByUser); //count de reservaciones
+
 
 
 module.exports = api;
