@@ -18,5 +18,7 @@ api.put('/:idU/removeRoom/:idC', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], ro
 api.get('/:idU/getRoomByHotel', [mdAuth.ensureAuth, mdAuth.ensureAuthAdminHotel], roomController.getRoomByHotel);
 api.get('/getHotelsRooms', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], roomController.getHotelsRooms); // obtener todos los hoteles con todas las habitaciones
 
+api.put('/:idU/updateRoomClient/:idC', [mdAuth.ensureAuth], roomController.updateRoom);
+
 
 module.exports = api;

@@ -120,8 +120,24 @@ function transInvoice(req,res){
     })
 }
 
+function invoicesByUser(req,res){
+    let userId = req.params.id;
+
+    Invoice.find({users: userId}, (err, invoicesFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'});
+        }else if(invoicesFind){
+            return res.send({message: 'cantidad de reservaciones: ',invoicesFind});
+        }else{
+            return res.status(404).send({message: 'No hay registros'})
+        }
+
+    }).populate("reservations")
+}
+
 module.exports = {
     saveInvoice,
     updateInvoice,
-    transInvoice
+    transInvoice,
+    invoicesByUser
 }

@@ -265,7 +265,7 @@ function reservsByUser(req,res){
             return res.status(404).send({message: 'No hay registros'})
         }
 
-    })
+    }).populate("rooms")
 }
 module.exports = {
     saveReservation,
@@ -276,7 +276,7 @@ module.exports = {
     countReserv,
     reservsByHotel,
     reservsAddHotel,
-    reservsByUser
-    countReservByHotel
+    reservsByUser,
+    countReservByHotel,
     reservsAddHotel,
 }
