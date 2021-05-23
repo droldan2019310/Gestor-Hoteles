@@ -221,8 +221,6 @@ function search(req, res){
     }else{
         return res.status(403).send({message: 'Ingresa algún dato en el campo de búsqueda'})
     }
-
-
 }
 
 

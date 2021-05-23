@@ -21,6 +21,8 @@ api.put('/reservsAddHotel/:id',mdAuth.ensureAuth, reservationController.reservsA
 api.get('/countReservByHotel/:idHotel', [mdAuth.ensureAuth, mdAuth.ensureAuthAdminHotel], reservationController.countReservByHotel); //obtener todos los user. Opcion habil solo para admin.
 api.get('/reservsByUser/:id',mdAuth.ensureAuth, reservationController.reservsByUser); //count de reservaciones
 
+api.get('/best3HotelCount',mdAuth.ensureAuth, reservationController.best3HotelCount); //Mejores 3 hoteles. 
+api.put('/usersByHotelCount/:id',mdAuth.ensureAuth, reservationController.usersByHotelCount); //count de reservaciones
 
 
 module.exports = api;

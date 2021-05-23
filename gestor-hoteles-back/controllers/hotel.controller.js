@@ -320,6 +320,8 @@ function best1Hotel(req,res){
         }
     }).limit(1).populate("rooms")
 }
+
+
 function getHotels(req,res){
     Hotel.find({}, (err,hotelFind)=>{
         if(err){
@@ -331,6 +333,7 @@ function getHotels(req,res){
         }
     }).populate("rooms")
 }
+
 function searchHotel(req,res){
     let id = req.params.HotelId;
     Hotel.findById(id, (err,hotelFind)=>{
@@ -343,6 +346,9 @@ function searchHotel(req,res){
         }
     }).populate("rooms")
 }
+
+
+
 module.exports = {
     saveHotel,
     uploadImageHotel,
