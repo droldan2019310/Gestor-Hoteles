@@ -74,6 +74,7 @@ function updateRoom(req, res){
 
         Hotel.findOne({_id: hotelId, rooms: roomId}, (err, roomPull)=>{
             if(err){
+                    console.log(err);
                     return res.status(500).send({message: 'Error general'});
                 }else if(roomPull){
                     Room.findByIdAndUpdate(roomId, update, {new: true}, (err, updateRoom)=>{
@@ -119,6 +120,19 @@ function getRoomByHotel(req,res){
 
     Hotel.findById({_id: hotelId}).populate('rooms').exec((err, hotels)=>{
         if(err){
+            console.log(err)
+            return res.status(500).send({message: 'Error general'})
+        }else if(hotels){
+            return res.send({message: 'Hoteles encontrados', hotels})
+        }else{
+            return res.status(404).send({message: 'No hay registros'})
+        }
+    })
+}
+
+function getHotelsRooms(req,res){
+    Hotel.find().populate('rooms').exec((err, hotels)=>{
+        if(err){
             return res.status(500).send({message: 'Error general'})
         }else if(hotels){
             return res.send({message: 'Hoteles encontrados', hotels})
@@ -133,5 +147,6 @@ module.exports = {
     uploadImageRoom,
     updateRoom,
     removeRoom,
-    getRoomByHotel
+    getRoomByHotel,
+    getHotelsRooms
 }

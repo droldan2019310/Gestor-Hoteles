@@ -4,8 +4,8 @@ var Feature = require('../models/feature.module.');
 var Hotel = require('../models/hotel.model');
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require('../services/jwt');
-
-
+var fs = require('fs');
+var path = require('path');
 function uploadImageFeature(req, res){
     var featureId = req.params.id;
     var fileName = 'Sin imagen';
@@ -56,6 +56,7 @@ function updateFeature(req, res){
 
         Hotel.findOne({_id: hotelId, features: featureId}, (err, featurePull)=>{
             if(err){
+                    console.log(err)
                     return res.status(500).send({message: 'Error general'});
                 }else if(featurePull){
                     Feature.findByIdAndUpdate(featureId, update, {new: true}, (err, updateFeature)=>{
@@ -115,23 +116,14 @@ function getFeatureByHotel(req,res){
 function getImageFeature(req, res){
     var fileName = req.params.fileName;
     var pathFile = './uploads/users/' + fileName;
-    var params = req.body;
-
-    Hotel.findOne({name: params.name}, (err, hotelFind)=>{
-        if(err){
-            return res.status(500).send({message: 'Error general'});
-        }else if(hotelFind){
-            fs.exists(pathFile, (exists)=>{
-                if(exists){                    
-                    return res.sendFile(path.resolve(pathFile))
-                }else{
-                   return res.status(404).send({message: 'Imagen inexistente'});
-                }
-            })
+    fs.exists(pathFile, (exists)=>{
+        if(exists){                    
+            return res.sendFile(path.resolve(pathFile))
         }else{
-            return res.status(404).send({message: 'Hotel no encontrado'});
+           return res.status(404).send({message: 'Imagen inexistente'});
         }
-    })    
+    })
+       
 }
 
 module.exports = {

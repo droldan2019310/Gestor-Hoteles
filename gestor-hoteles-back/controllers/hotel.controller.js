@@ -15,7 +15,7 @@ function saveHotel(req, res){
     var hotel = new Hotel();
     var params = req.body;
 
-    if(params.name && params.phone && params.email && params.addres){
+    if(params.name && params.phone && params.email && params.addres && params.description){
         Hotel.findOne({name: params.name}, (err, hotelFind)=>{
             if(err){
                 return res.status(500).send({message: 'Erro general en el servidor'});
@@ -27,12 +27,13 @@ function saveHotel(req, res){
                 hotel.email = params.email;
                 hotel.addres = params.addres;
                 hotel.descAddress = params.descAddress;
+                hotel.description = params.description;
 
                 hotel.save((err, hotelSaved)=>{
                     if(err){
                         return res.status(500).send({message: 'Error general al guardar hotel'});
                     }else if(hotelSaved){
-                        return res.send({message: 'Hotel creado exitosamente'});
+                        return res.send({message: 'Hotel creado exitosamente', hotelSaved});
                     }else{
                         return res.status(500).send({message: 'No se guardó el hotel'});
                     }
@@ -92,22 +93,13 @@ function getImage(req, res){
     var fileName = req.params.fileName;
     var pathFile = './uploads/users/' + fileName;
     var params = req.body;
-
-    Hotel.findOne({name: params.name}, (err, hotelFind)=>{
-        if(err){
-            return res.status(500).send({message: 'Error general'});
-        }else if(hotelFind){
-            fs.exists(pathFile, (exists)=>{
-                if(exists){                    
-                    return res.sendFile(path.resolve(pathFile))
-                }else{
-                   return res.status(404).send({message: 'Imagen inexistente'});
-                }
-            })
+        fs.exists(pathFile, (exists)=>{
+        if(exists){
+            return res.sendFile(path.resolve(pathFile))
         }else{
-            return res.status(404).send({message: 'Hotel no encontrado'});
+           return res.status(404).send({message: 'Imagen inexistente'});
         }
-    })    
+    }) 
 }
 
 
@@ -120,7 +112,19 @@ function updateHotel(req, res){
                     if(err){
                         return res.status(500).send({ message: 'Error general'});
                     }else if(hotelFind){
-                            return res.send({message: 'Nombre de hotel ya en uso'});
+                        if(hotelFind._id == hotelId){   
+                             Hotel.findByIdAndUpdate(hotelId, update, {new: true}, (err, hotelUpdate)=>{
+                                if(err){
+                                    return res.status(500).send({message: 'Error general al actualizar'});
+                                }else if(hotelUpdate){
+                                    return res.send({message: 'Hotel actualizado', hotelUpdate});
+                                }else{
+                                    return res.send({message: 'No se pudo actualizar al hotel'});
+                                }
+                            })
+                        }else{
+                            return res.send({message: 'Nombre de hotel ya en uso'});    
+                        }
                     }else{
                         Hotel.findByIdAndUpdate(hotelId, update, {new: true}, (err, hotelUpdate)=>{
                             if(err){
@@ -175,7 +179,7 @@ function setUserHotel(req,res){
             }else{
                 Hotel.findByIdAndUpdate(hotelId, {$push:{users: userFind._id}}, {new: true}, (err, pushUser)=>{
                     if(err){
-                        return res.status(500).send({username: userFind.username});
+                        return res.status(500).send({message: "error general"});
                     }else if(pushUser){
                         return res.send({message: 'Usuario agregado al hotel', pushUser});
                     }else{
@@ -213,7 +217,7 @@ function setFeatureHotel(req, res){
                     if(err){
                         return res.status(500).send({message: 'Error general al setear el servicio'});
                     }else if(pushFeature){
-                        return res.send({message: 'Servicio creado y agregado', pushFeature});
+                        return res.send({message: 'Servicio creado y agregado', pushFeature, featureSaved});
                     }else{
                         return res.status(404).send({message: 'No se seteo el servicio, pero sí se creó en la BD'});
                     }
@@ -251,7 +255,7 @@ function setRoomHotel(req, res){
                     if(err){
                         return res.status(500).send({message: 'Error general al agregar la habitación'});
                     }else if(pushRoom){
-                        return res.send({message: 'Habitación creada y agregada', pushRoom});
+                        return res.send({message: 'Habitación creada y agregada', pushRoom,roomSaved});
                     }else{
                         return res.status(404).send({message: 'No se seteo la habitación, pero sí se creó en la base de datos'});
                     }
@@ -281,7 +285,7 @@ function findUserByHotel(req, res){
                 }else{
                     return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
                 }
-            })
+            }).populate("features")
         }else {
             return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
         }
@@ -301,7 +305,7 @@ function best3Hotel(req,res){
         }else{
             return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
         }
-    }).limit(3).sort(mysort)
+    }).limit(3).sort(mysort).populate("rooms")
 }
 
 
@@ -314,9 +318,31 @@ function best1Hotel(req,res){
         }else{
             return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
         }
-    }).limit(1)
+    }).limit(1).populate("rooms")
 }
-
+function getHotels(req,res){
+    Hotel.find({}, (err,hotelFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'});
+        }else if(hotelFind){
+            return res.send({message: 'Hotel encontrado', hotelFind});
+        }else{
+            return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
+        }
+    }).populate("rooms")
+}
+function searchHotel(req,res){
+    let id = req.params.HotelId;
+    Hotel.findById(id, (err,hotelFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'});
+        }else if(hotelFind){
+            return res.send({message: 'Hotel encontrado', hotelFind});
+        }else{
+            return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
+        }
+    }).populate("rooms")
+}
 module.exports = {
     saveHotel,
     uploadImageHotel,
@@ -328,5 +354,7 @@ module.exports = {
     setRoomHotel,
     findUserByHotel,
     best3Hotel,
-    best1Hotel
+    best1Hotel,
+    getHotels,
+    searchHotel
 }
