@@ -121,19 +121,19 @@ function transInvoice(req,res){
 }
 
 //Esta busqueda se realiza en el modelo de invoiceBackup
-function listInvoiceByUser(req, res){
-    let userId = req.params.id;
-
-    InvoiceBackup.find({users: userId}, (err, InvoiceFind)=>{
-        if(err){
-            return res.status(500).send({message: 'Error general al realizar la busqueda'})
-        }else if(InvoiceFind){
-        }else{
-            return res.send({message: 'Factura encontrada',InvoiceFind });
-            return res.status(404).send({message: 'No se pudo realizar la busqueda'})
-        }
-}
-    })
+function listInvoiceByUser(req, res){ 
+    let userId = req.params.id; 
+ 
+    InvoiceBackup.find({users: userId}, (err, InvoiceFind)=>{ 
+        if(err){ 
+            return res.status(500).send({message: 'Error general al realizar la busqueda'}) 
+        }else if(InvoiceFind){ 
+            return res.send({message: 'Factura encontrada',InvoiceFind }); 
+        }else{ 
+            return res.status(404).send({message: 'No se pudo realizar la busqueda'}) 
+        } 
+    }) 
+} 
 
 function SearchInvoiceByUser(req, res){
 //Esta busqueda se realiza en el modelo de invoiceBackup
@@ -150,55 +150,52 @@ function SearchInvoiceByUser(req, res){
 
     })
 }
-
 function payInvoice(req, res){
     let userId = req.params.id;
-    let update = req.body;
     let invoiceId = req.params.idI;
+    let update = req.body;
 
-}
-    })
-        }
-            return res.status(404).send({message: 'No se pudo realizar la busqueda'})
 
-            })
-        }else{
-                }
-                    return res.send({message: 'No se pudo actualizar'});
-                }else{
-                    return res.send({message: 'Factura pagada', invoiceUpdate});
-                    return res.status(500).send({message: 'Error general al actualizar'});
-                }else if(invoiceUpdate){
-                if(err){
+    Invoice.find({users: userId, _id:invoiceId}, (err, InvoiceFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general al realizar la busqueda'})
         }else if(InvoiceFind){
             Invoice.findByIdAndUpdate(InvoiceFind._id, update, {new: true}, (err, invoiceUpdate)=>{
-            return res.status(500).send({message: 'Error general al realizar la busqueda'})
-    Invoice.find({users: userId, _id:invoiceId}, (err, InvoiceFind)=>{
-
-
-        if(err){
+                if(err){
+                    return res.status(500).send({message: 'Error general al actualizar'});
+                }else if(invoiceUpdate){
+                    return res.send({message: 'Factura pagada', invoiceUpdate});
+                }else{
+                    return res.send({message: 'No se pudo actualizar'});
+                }
+            })
+        }else{
+            return res.status(404).send({message: 'No se pudo realizar la busqueda'})
+        }
+    })
 
 }
-
-    }).populate("reservations")
-        }
-            return res.status(404).send({message: 'No hay registros'})
-        }else{
-            return res.send({message: 'cantidad de reservaciones: ',invoicesFind});
 function invoicesByUser(req,res){
     let userId = req.params.id;
-    Invoice.find({users: userId}, (err, invoicesFind)=>{
 
+    Invoice.find({users: userId}, (err, invoicesFind)=>{
         if(err){
             return res.status(500).send({message: 'Error general'});
         }else if(invoicesFind){
+            return res.send({message: 'cantidad de reservaciones: ',invoicesFind});
+        }else{
+            return res.status(404).send({message: 'No hay registros'})
+        }
+
+    }).populate("reservations")
+}
 module.exports = {
     saveInvoice,
     updateInvoice,
     transInvoice,
     listInvoiceByUser,
     SearchInvoiceByUser,
-    payInvoice
-    invoicesByUser
+    payInvoice,
+    invoicesByUser,
     transInvoice,
 }

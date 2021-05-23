@@ -313,7 +313,7 @@ module.exports = {
     reservsAddHotel,
     reservsByUser,
     best3HotelCount,
-    usersByHotelCount
+    usersByHotelCount,
     countReservByHotel,
     reservsAddHotel,
 }
