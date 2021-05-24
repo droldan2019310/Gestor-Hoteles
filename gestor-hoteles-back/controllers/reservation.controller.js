@@ -46,24 +46,29 @@ function saveReservation(req, res){
                                             if(err){
                                                 return res.status(500).send({message: 'Error general al buscar su reservacion'});
                                             }else if(reservComplete){
-                                                return res.send({reservationComplete: reservComplete});
+                                                return res.send({message:"se registró tu reservación",reservationComplete: reservComplete});
                                             }else{
+
                                                 return res.status(500).send({message: 'No se encontro su reservacion'});
                                             }
                                         })
                                         }else{
+                                            
                                         return res.status(402).send({message: 'No se encontro ninguna habitacion'});
                                     }
                                 })
                             }else{
+                                
                                 return res.status(402).send({message: 'No se guardó su reservación'});
                             }
                         })
                     }else{
+                        
                         return res.status(500).send({message: 'No se guardó el usuario'});
                     }
                 })
             }else{
+                
                 return res.status(500).send({message: 'No se guardó su reservación'});
             }
         })
@@ -71,7 +76,30 @@ function saveReservation(req, res){
         return res.status(401).send({message: 'Por favor envía los datos mínimos para la creación de tu reservación'})   
     }
 }
-  
+
+function updateHotelCant(req,res){
+    let update = req.body;
+    
+    let idHotel = req.params.id;
+    Hotel.findById(idHotel, (err, hotelFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'});
+        }else if(hotelFind){
+            update.cantReservs = hotelFind.cantReservs + 1;;
+            Hotel.findByIdAndUpdate(idHotel,update,{new:true},(err,hotelUpdate)=>{
+                 if(err){
+                    return res.status(500).send({message: 'Error general al actualizar'});
+                }else if(hotelUpdate){
+                    return res.send({message: 'Hotel actualizado', hotelUpdate});
+                }else{
+                    return res.send({message: 'No se pudo actualizar'});
+                }
+            })
+        }else{
+            return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
+        }
+    }).populate("features");
+}
 
 function updateReservation(req, res){
     let reservId = req.params.id;
@@ -181,6 +209,20 @@ function countReserv(req,res){
     })
 }
 
+function countReservByHotel(req,res){
+   let hotelId = req.params.idHotel;
+    Reservation.countDocuments({hotels: hotelId}, (err,reservs)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'})
+        }else if(reservs){
+            return res.send({message: 'Reservaciones encontrados', countReservs: reservs})
+        }else{
+            return res.status(404).send({message: 'No hay registros'})
+        }
+    })
+}
+
+
 function reservsByHotel(req, res){
     let hotelId = req.params.id;
 
@@ -196,7 +238,7 @@ function reservsByHotel(req, res){
                 }else{
                     return res.status(404).send({message: 'No hay registros 2'})
                 }
-            })
+            }).populate("rooms")
         }else{
             return res.status(404).send({message: 'No hay registros 1 '})
         }
@@ -246,7 +288,7 @@ function reservsByUser(req,res){
             return res.status(404).send({message: 'No hay registros'})
         }
 
-    })
+    }).populate("rooms")
 }
 
 
@@ -294,5 +336,8 @@ module.exports = {
     reservsAddHotel,
     reservsByUser,
     best3HotelCount,
-    usersByHotelCount
+    usersByHotelCount,
+    countReservByHotel,
+    reservsAddHotel,
+    updateHotelCant
 }

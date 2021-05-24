@@ -20,7 +20,11 @@ function saveInvoice(req, res){
         invoice.number = Math.random(); 
         invoice.serie = 'A1';
         invoice.date = params.date;
-
+        invoice.hotels = params.hotel;
+        invoice.totalNet = params.totalNet;
+        invoice.total = params.total;
+        invoice.hotel = params.hotel;
+        invoice.status = "PENDIENTE";
         invoice.save((err, invoiceSaved)=>{
             if(err){
                 return res.status(500).send({message: 'Error general al añadir factura'});
@@ -121,44 +125,42 @@ function transInvoice(req,res){
 }
 
 //Esta busqueda se realiza en el modelo de invoiceBackup
-function listInvoiceByUser(req, res){
-    let userId = req.params.id;
+function listInvoiceByUser(req, res){ 
+    let userId = req.params.id; 
+ 
+    InvoiceBackup.find({users: userId}, (err, InvoiceFind)=>{ 
+        if(err){ 
+            return res.status(500).send({message: 'Error general al realizar la busqueda'}) 
+        }else if(InvoiceFind){ 
+            return res.send({message: 'Factura encontrada',InvoiceFind }); 
+        }else{ 
+            return res.status(404).send({message: 'No se pudo realizar la busqueda'}) 
+        } 
+    }) 
+} 
 
-    InvoiceBackup.find({users: userId}, (err, InvoiceFind)=>{
-        if(err){
-            return res.status(500).send({message: 'Error general al realizar la busqueda'})
-        }else if(InvoiceFind){
-            return res.send({message: 'Factura encontrada',InvoiceFind });
-        }else{
-            return res.status(404).send({message: 'No se pudo realizar la busqueda'})
-        }
-    })
-}
-
-//Esta busqueda se realiza en el modelo de invoiceBackup
 function SearchInvoiceByUser(req, res){
-    let userId = req.params.id;
+//Esta busqueda se realiza en el modelo de invoiceBackup
     let invoiceId = req.params.idI;
+    let userId = req.params.id;
 
     InvoiceBackup.find({users: userId, _id:invoiceId}, (err, InvoiceFind)=>{
         if(err){
-            return res.status(500).send({message: 'Error general al realizar la busqueda'})
         }else if(InvoiceFind){
+            return res.status(500).send({message: 'Error general al realizar la busqueda'})
             return res.send({message: 'Factura encontrada',InvoiceFind });
-        }else{
             return res.status(404).send({message: 'No se pudo realizar la busqueda'})
         }
+
     })
-
 }
-
 function payInvoice(req, res){
     let userId = req.params.id;
     let invoiceId = req.params.idI;
     let update = req.body;
 
-
-    Invoice.find({users: userId, _id:invoiceId}, (err, InvoiceFind)=>{
+    update.status = "PAGADA"
+    Invoice.findOne({users: userId, _id:invoiceId}, (err, InvoiceFind)=>{
         if(err){
             return res.status(500).send({message: 'Error general al realizar la busqueda'})
         }else if(InvoiceFind){
@@ -176,6 +178,56 @@ function payInvoice(req, res){
         }
     })
 
+}
+function invoiceByHotel(req, res){
+    let hotelId = req.params.id;
+
+    Hotel.findById(hotelId, (err, hotelFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'})
+        }else if(hotelFind){
+            Invoice.find({hotels: hotelFind._id}, (err, invoiceFind)=>{
+                if(err){
+                    return res.status(500).send({message: 'Error general'})
+                }else if(invoiceFind){
+                    return res.send({message: 'Facturas encontradas encontrados', invoiceFind})
+                }else{
+                    return res.status(404).send({message: 'No hay registros de facturas'})
+                }
+            }).populate("users")
+        }else{
+            return res.status(404).send({message: 'No hay registros de hoteles'})
+        }
+    })
+}
+function invoicesByUser(req,res){
+    let userId = req.params.id;
+
+    Invoice.find({users: userId}, (err, invoicesFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'});
+        }else if(invoicesFind){
+            return res.send({message: 'cantidad de reservaciones: ',invoicesFind});
+        }else{
+            return res.status(404).send({message: 'No hay registros'})
+        }
+
+    }).populate("reservations")
+}
+
+function invoicesByUserFeature(req,res){
+    let userId = req.params.id;
+
+    Invoice.find({users: userId}, (err, invoicesFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'});
+        }else if(invoicesFind){
+            return res.send({message: 'cantidad de reservaciones: ',invoicesFind});
+        }else{
+            return res.status(404).send({message: 'No hay registros'})
+        }
+
+    }).populate("features")
 }
 
 //Esta busqueda se realiza en el modelo de invoiceBackup
@@ -201,6 +253,9 @@ module.exports = {
     transInvoice,
     listInvoiceByUser,
     SearchInvoiceByUser,
-    SearchInvoiceByHotel,
-    payInvoice
+    payInvoice,
+    invoicesByUser,
+    transInvoice,
+    invoiceByHotel,
+    invoicesByUserFeature
 }

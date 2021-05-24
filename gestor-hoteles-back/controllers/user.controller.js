@@ -62,36 +62,58 @@ function updateUser(req, res){
     let userId = req.params.id;
     let update = req.body;
 
-    if(update.username){
-        User.findOne({username: update.username}, (err, usernameFind)=>{
-            if(err){
-                res.status(500).send({message: 'Error en el servidor'})
-            }else if(usernameFind){
-                res.status(200).send({message: 'Nombre de usario ya en uso, no se puede actualizar'})
-            }else{                
-                User.findByIdAndUpdate(userId, update, {new: true},(err, userUpdated)=>{
+    if(userId != req.user.sub){
+        return res.status(401).send({ message: 'No tienes permiso para realizar esta acción'});
+    }else{
+        if(update.password || update.role){
+            return res.status(401).send({ message: 'No se puede actualizar la contraseña ni el rol desde esta función'});
+        }else{
+            if(update.username){
+                User.findOne({username: update.username.toLowerCase()}, (err, userFind)=>{
                     if(err){
-                        res.status(500).send({message: 'Error en el servidor al intentar actualizar'});
-                    }else if(userUpdated){
-                        res.status(200).send({message: 'usuario actualizado', userUpdated});
+                        return res.status(500).send({ message: 'Error general'});
+                    }else if(userFind){
+                        if(userFind._id == req.user.sub){
+                            User.findByIdAndUpdate(userId, update, {new: true}, (err, userUpdated)=>{
+                                if(err){
+                                    return res.status(500).send({message: 'Error general al actualizar'});
+                                }else if(userUpdated){
+                                    return res.send({message: 'Usuario actualizado', userUpdated});
+                                }else{
+                                    return res.send({message: 'No se pudo actualizar al usuario'});
+                                }
+                            })
+                        }else{
+                            return res.send({message: 'Nombre de usuario ya en uso'});
+                        }
                     }else{
-                        res.status(200).send({message: 'No hay registro para actualizar'});
+                        User.findByIdAndUpdate(userId, update, {new: true}, (err, userUpdated)=>{
+                            if(err){
+                                return res.status(500).send({message: 'Error general al actualizar'});
+                            }else if(userUpdated){
+                                return res.send({message: 'Usuario actualizado', userUpdated});
+                            }else{
+                                return res.send({message: 'No se pudo actualizar al usuario'});
+                            }
+                        })
+                    }
+                })
+            }else{
+                User.findByIdAndUpdate(userId, update, {new: true}, (err, userUpdated)=>{
+                    if(err){
+                        return res.status(500).send({message: 'Error general al actualizar'});
+                    }else if(userUpdated){
+                        return res.send({message: 'Usuario actualizado', userUpdated});
+                    }else{
+                        return res.send({message: 'No se pudo actualizar al usuario'});
                     }
                 })
             }
-        })
-    }else{
-        User.findByIdAndUpdate(userId, update, {new: true},(err, userUpdated)=>{
-            if(err){
-                res.status(500).send({message: 'Error en el servidor al intentar actualizar'});
-            }else if(userUpdated){
-                res.status(200).send({message: 'usuario actualizado', userUpdated});
-            }else{
-                res.status(200).send({message: 'No hay registro para actualizar'});
-            }
-        })
-    } 
+        }
+    }
+    
 }
+
 
 function removeUser(req, res){
     let userId = req.params.id;

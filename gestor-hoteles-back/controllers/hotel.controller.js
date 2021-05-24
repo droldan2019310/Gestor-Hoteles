@@ -28,7 +28,7 @@ function saveHotel(req, res){
                 hotel.addres = params.addres;
                 hotel.descAddress = params.descAddress;
                 hotel.description = params.description;
-
+                hotel.cantReservs = params.cantReservs;
                 hotel.save((err, hotelSaved)=>{
                     if(err){
                         return res.status(500).send({message: 'Error general al guardar hotel'});
@@ -310,7 +310,7 @@ function best3Hotel(req,res){
 
 
 function best1Hotel(req,res){
-    Hotel.find({}, (err,hotelFind)=>{
+    Hotel.findOne({}, (err,hotelFind)=>{
         if(err){
             return res.status(500).send({message: 'Error general'});
         }else if(hotelFind){
