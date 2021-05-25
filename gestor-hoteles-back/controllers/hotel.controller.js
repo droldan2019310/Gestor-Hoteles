@@ -348,7 +348,20 @@ function searchHotel(req,res){
 }
 
 
+function search(req,res){
+    var params = req.body;
 
+            Room.find({'$and': [{priceRoom: {'$lt': params.priceRoom}},{priceRoom: {'$gt': params.priceRoom}}]},(err, roomFind)=>{
+                if(err){
+                    return res.status(500).send({message: 'Error general'});
+                }else if(roomFind){
+                    return res.send({message: 'cuarto encontrado',roomFind});
+                }else{
+                    return res.status(500).send({message: 'No se encontro ningun usuario con este id'});
+                }
+            })
+
+}
 module.exports = {
     saveHotel,
     uploadImageHotel,
@@ -362,5 +375,6 @@ module.exports = {
     best3Hotel,
     best1Hotel,
     getHotels,
-    searchHotel
+    searchHotel,
+    search
 }

@@ -230,6 +230,23 @@ function invoicesByUserFeature(req,res){
     }).populate("features")
 }
 
+//Esta busqueda se realiza en el modelo de invoiceBackup
+function SearchInvoiceByHotel(req, res){
+    let reservationId = req.params.id;
+    let invoiceId = req.params.idI;
+
+    InvoiceBackup.find({reservations: reservationId}, (err, InvoiceFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general al realizar la busqueda'})
+        }else if(InvoiceFind){
+            Reservation.find({})
+        }else{
+            return res.status(404).send({message: 'No se pudo realizar la busqueda'})
+        }
+    })
+
+}
+
 module.exports = {
     saveInvoice,
     updateInvoice,
