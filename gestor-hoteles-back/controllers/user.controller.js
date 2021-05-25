@@ -4,7 +4,42 @@ var User = require('../models/user.model');
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require('../services/jwt');
 
-
+function createInit(req,res){
+    var adminName= 'Admin';
+    var adminUserName = 'Admin';
+    var adminPassword = '12345';
+    var adminRole = 'ROLE_ADMIN';
+    var user = new User();
+    User.findOne({userName: adminUserName},(err,userFind)=>{
+        if(err){
+            console.log("error general",err);
+        }else if(userFind){
+            console.log("usuario ya existe, Usuario:Admin, password:12345");
+        }else{
+            bcrypt.hash(adminPassword,null,null,(err, passwordHash)=>{
+                if(err){
+                    console.log("error general al encriptar",err);
+                }else if(passwordHash){
+                    user.name = adminName;
+                    user.userName = adminUserName;
+                    user.password= passwordHash;
+                    user.role = adminRole;
+                    user.save((err,userSaved)=>{
+                        if(err){
+                            console.log("error general al guardar",err);
+                        }else if(userSaved){
+                            console.log("usuario creado, Usuario:Admin, password:12345");
+                        }else{
+                            console.log("no se pudo guardar el usuario");
+                        }
+                    })
+                }else{
+                    console.log("no se pudo encriptar");
+                }
+            })
+        }
+    })
+}
 function saveUser(req, res){
     var user = new User();
     var params = req.body;
@@ -137,5 +172,6 @@ module.exports = {
     saveUser,
     pruebaController,
     updateUser,
-    removeUser
+    removeUser,
+    createInit
 }
