@@ -8,7 +8,7 @@ function createInit(req,res){
     var adminName= 'Admin';
     var adminUserName = 'Admin';
     var adminPassword = '12345';
-    var adminRole = 'ROLE_ADMIN';
+    var role = 'ROLE_ADMIN';
     var user = new User();
     User.findOne({userName: adminUserName},(err,userFind)=>{
         if(err){
@@ -23,7 +23,7 @@ function createInit(req,res){
                     user.name = adminName;
                     user.userName = adminUserName;
                     user.password= passwordHash;
-                    user.role = adminRole;
+                    user.role = role;
                     user.save((err,userSaved)=>{
                         if(err){
                             console.log("error general al guardar",err);
