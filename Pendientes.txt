@@ -1,0 +1,10 @@
+- listar Facturas de dicho hotel
+
+- buscar factura por usuario
+
+-Listar facturas por usuario
+
+
+- pagar factura
+
+

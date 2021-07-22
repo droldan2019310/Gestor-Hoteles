@@ -1,6 +1,6 @@
 ---------- Gestor de hoteles ---------
 
-Model User
+Model User --YAAA (falta settear hotel)
 	name
 	lastname
 	phone 
@@ -8,6 +8,7 @@ Model User
 	email
 	password
 	Role [Admin, Admin_Hotel, UserCustomer]
+	hotel[object_Id]
 
 Model Hotel
 	name
@@ -18,12 +19,13 @@ Model Hotel
 	descAddress
 	img
 	Room[object_Id]
+	Feature
 
-Model Addres 
+Model Addres --- YAAA
 	department [Guatemala, San marcos, Peten, etc...]
 	desc 
 
-Model Room
+Model Room --YAAA 
 	nameRoom  
 	priceRoom 
 	descRoom  
@@ -67,7 +69,7 @@ Model Invoice
 	
 
 ----- Funciones del usuario: -----
-1. Un usuario puede registrarse.
+1. Un usuario puede registrarse. //ya
 2. El usuario puede buscar el hotel y realizar la reservación.
 3. Puede visualizar las habitaciones por hotel.
 4. Puede ver los eventos de un hotel en especifico
@@ -75,7 +77,7 @@ Model Invoice
 6. Eliminar o editar su cuenta.
 
 ----- Funciones del administrador de la aplicación: -----
-1. El administrador puede ver todos los usuarios registrados.
+1. El administrador puede ver todos los usuarios registrados.//ya
 2. Puede agregar a la base de datos un nuevo hotel. Indicando su dirección,
 sus precios por habitación, su administrador, etc.
 3. Puede ver la estadística (graficas) de que hotel fue el más solicitado.
